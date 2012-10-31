@@ -1,0 +1,107 @@
+var fs = require('fs');
+var path = require('path');
+
+var _ = require('underscore');
+var express = require('express');
+var ffmpeg = require('fluent-ffmpeg');
+var mmm = require('mmmagic');
+var ts = require('tailing-stream');
+
+var streamify = require('./lib/streamify');
+
+// load the config file
+var config = require('./config.json');
+
+// create our app
+var app = express();
+
+// build the streamer
+var streamer = new streamify.Streamify(config);
+
+// return a JSON error object
+var error = function (msg, props) {
+  var err = {
+    error: msg
+  };
+
+  // add custom properties if necessary
+  if (props) {
+    _.extend(err, props);
+  }
+
+  return err;
+};
+
+// get a list of all streams sorted by create_date
+app.get('/streams', function (req, res) {
+  res.send({
+    streams: _.map(streamer.getStreams(), function (s) { return s.toJSON(); })
+  });
+});
+
+// get information about a specific stream
+app.get('/streams/:stream', function (req, res) {
+  var stream = streamer.getStream(req.params.stream);
+
+  if (stream) {
+    res.send(stream.toJSON());
+  } else {
+    res.statusCode = 404;
+    res.send(error('stream not found: ' + req.params.stream));
+  }
+});
+
+// get information about all the segments for a stream
+app.get('/streams/:stream/segments', function (req, res) {
+  var segments = streamer.getSegments(req.params.stream);
+
+  if (segments) {
+    res.send({
+      segments: _.map(segments, function (s) { return s.toJSON(); })
+    });
+  } else {
+    res.statusCode = 404;
+    res.send(error('stream not found: ' + req.params.stream));
+  }
+});
+
+// get information about the latest segment in a stream
+app.get('/streams/:stream/segments/latest', function (req, res) {
+  var segment = streamer.getLatestSegment(req.params.stream);
+
+  if (segment) {
+    res.send(segment.toJSON());
+  } else {
+    res.statusCode = 404;
+    res.send(error('stream not found or had no segments: ' +
+        req.params.stream + '[latest]'));
+  }
+});
+
+// get information about a specific segment in a stream
+app.get('/streams/:stream/segments/:segment', function (req, res) {
+  var segment = streamer.getSegment(req.params.stream, req.params.segment);
+
+  if (segment) {
+    res.send(segment.toJSON());
+  } else {
+    res.statusCode = 404;
+    res.send(error('stream or segment not found: ' +
+        req.params.stream + '[' + req.params.segment + ']'));
+  }
+});
+
+// start recording a new stream
+app.post('/streams', function (req, res) {
+  var stream = streamer.record();
+
+  if (stream) {
+    res.send(stream.toJSON());
+  } else {
+    res.statusCode = 500;
+    res.send(error('unable to create stream'));
+  }
+});
+
+app.listen(config.port);
+console.log('listening on port ' + config.port);

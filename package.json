@@ -1,0 +1,13 @@
+{
+  "name": "streamify",
+  "description": "Records and streams video files.",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.x",
+    "mmmagic": "0.2.x",
+    "fluent-ffmpeg": "1.3.x",
+    "underscore": "1.4.x",
+    "tailing-stream": "0.0.x"
+  }
+}
