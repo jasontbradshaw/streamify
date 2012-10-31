@@ -34,21 +34,28 @@ var error = function (msg, props) {
 
 // get a list of all streams sorted by create_date
 app.get('/streams', function (req, res) {
-  res.send({
-    streams: _.map(streamer.getStreams(), function (s) { return s.toJSON(); })
+  streamer.getStreams(function (streams) {
+    if (streams) {
+      res.send({
+        streams: _.map(streams, function (s) { return s.toJSON(); })
+      });
+    } else {
+      res.statusCode = 404;
+      res.send(error('stream not found: ' + req.params.stream));
+    }
   });
 });
 
 // get information about a specific stream
 app.get('/streams/:stream', function (req, res) {
-  var stream = streamer.getStream(req.params.stream);
-
-  if (stream) {
-    res.send(stream.toJSON());
-  } else {
-    res.statusCode = 404;
-    res.send(error('stream not found: ' + req.params.stream));
-  }
+  streamer.getStream(req.params.stream, function (stream) {
+    if (stream) {
+      res.send(stream.toJSON());
+    } else {
+      res.statusCode = 404;
+      res.send(error('stream not found: ' + req.params.stream));
+    }
+  });
 });
 
 // get information about all the segments for a stream
