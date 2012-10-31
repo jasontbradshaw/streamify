@@ -1,11 +1,5 @@
-var fs = require('fs');
-var path = require('path');
-
 var _ = require('underscore');
 var express = require('express');
-var ffmpeg = require('fluent-ffmpeg');
-var mmm = require('mmmagic');
-var ts = require('tailing-stream');
 
 var streamify = require('./lib/streamify');
 
