@@ -52,44 +52,18 @@ app.get('/streams/:stream', function (req, res) {
   });
 });
 
-// get information about all the segments for a stream
+// get information about the existing segments for a stream
 app.get('/streams/:stream/segments', function (req, res) {
-  var segments = streamer.getSegments(req.params.stream);
-
-  if (segments) {
-    res.send({
-      segments: _.map(segments, function (s) { return s.toJSON(); })
-    });
-  } else {
-    res.statusCode = 404;
-    res.send(error('stream not found: ' + req.params.stream));
-  }
-});
-
-// get information about the latest segment in a stream
-app.get('/streams/:stream/segments/latest', function (req, res) {
-  var segment = streamer.getLatestSegment(req.params.stream);
-
-  if (segment) {
-    res.send(segment.toJSON());
-  } else {
-    res.statusCode = 404;
-    res.send(error('stream not found or had no segments: ' +
-        req.params.stream + '[latest]'));
-  }
-});
-
-// get information about a specific segment in a stream
-app.get('/streams/:stream/segments/:segment', function (req, res) {
-  var segment = streamer.getSegment(req.params.stream, req.params.segment);
-
-  if (segment) {
-    res.send(segment.toJSON());
-  } else {
-    res.statusCode = 404;
-    res.send(error('stream or segment not found: ' +
-        req.params.stream + '[' + req.params.segment + ']'));
-  }
+  streamer.getSegments(req.params.stream, function (segments) {
+    if (segments) {
+      res.send({
+        segments: _.map(segments, function (s) { return s.toJSON(); })
+      });
+    } else {
+      res.statusCode = 404;
+      res.send(error('stream not found: ' + req.params.stream));
+    }
+  });
 });
 
 // start recording a new stream
