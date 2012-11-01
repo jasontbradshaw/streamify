@@ -1,9 +1,7 @@
 {
     "port": 8000,
     "stream_dir": "./streams",
-    "segment_length_seconds": 10,
-    "rtp_stream": {
-        "host": "127.0.0.1",
-        "port": 5004
-    }
+
+    "ffmpeg_input": "rtp://127.0.0.1:5004",
+    "segment_length_seconds": 10
 }
