@@ -66,6 +66,20 @@ app.get('/streams/:stream/segments', function (req, res) {
   });
 });
 
+// get information about a specific segment in a stream
+app.get('/streams/:stream/segments/:index', function (req, res) {
+  var index = parseInt(req.params.index, 10);
+  streamer.getSegment(req.params.stream, index, function (segment) {
+    if (segment) {
+      res.send(segment.toJSON());
+    } else {
+      res.statusCode = 404;
+      res.send(error('stream or segment not found: ' +
+          req.params.stream + '[' + index + ']'));
+    }
+  });
+});
+
 // start recording a new stream
 app.post('/streams', function (req, res) {
   var stream = streamer.record();
