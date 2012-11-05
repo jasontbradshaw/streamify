@@ -7,6 +7,8 @@
     "express": "3.x",
     "node-ffprobe": "1.2.x",
     "underscore": "1.4.x",
-    "tailing-stream": "0.0.x"
+    "tailing-stream": "0.0.x",
+    "socket.io": "0.9.x",
+    "socket.io-client": "0.9.x"
   }
 }

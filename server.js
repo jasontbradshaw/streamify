@@ -81,15 +81,15 @@ app.get('/streams/:stream/segments/:index', function (req, res) {
 });
 
 // start recording a new stream
-app.post('/streams', function (req, res) {
-  var stream = streamer.record();
+app.post('/record', function (req, res) {
+  streamer.record();
+  res.send();
+});
 
-  if (stream) {
-    res.send(stream.toJSON());
-  } else {
-    res.statusCode = 500;
-    res.send(error('unable to create stream'));
-  }
+// stop recording any currently recording stream
+app.delete('/record', function (req, res) {
+  streamer.stop();
+  res.send();
 });
 
 app.listen(config.port);

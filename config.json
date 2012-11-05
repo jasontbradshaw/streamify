@@ -1,5 +1,7 @@
 {
     "port": 8000,
+    "ipc_port": 8001,
+    "ipc_reconnect_delay": 500,
     "stream_dir": "./streams",
 
     "ffmpeg_input": "rtp://127.0.0.1:5004",
