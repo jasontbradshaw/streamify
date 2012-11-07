@@ -28,40 +28,40 @@ var error = function (msg, props) {
 
 // get a list of all streams sorted by create_date
 app.get('/streams', function (req, res) {
-  streamer.getStreams(function (streams) {
-    if (streams) {
+  streamer.getStreams(function (err, streams) {
+    if (!err) {
       res.send({
         streams: _.map(streams, function (s) { return s.toJSON(); })
       });
     } else {
       res.statusCode = 404;
-      res.send(error('stream not found: ' + req.params.stream));
+      res.send(error(err.message));
     }
   });
 });
 
 // get information about a specific stream
 app.get('/streams/:stream', function (req, res) {
-  streamer.getStream(req.params.stream, function (stream) {
-    if (stream) {
+  streamer.getStream(req.params.stream, function (err, stream) {
+    if (!err) {
       res.send(stream.toJSON());
     } else {
       res.statusCode = 404;
-      res.send(error('stream not found: ' + req.params.stream));
+      res.send(error(err.message));
     }
   });
 });
 
 // get information about the existing segments for a stream
 app.get('/streams/:stream/segments', function (req, res) {
-  streamer.getSegments(req.params.stream, function (segments) {
-    if (segments) {
+  streamer.getSegments(req.params.stream, function (err, segments) {
+    if (!err) {
       res.send({
         segments: _.map(segments, function (s) { return s.toJSON(); })
       });
     } else {
       res.statusCode = 404;
-      res.send(error('stream not found: ' + req.params.stream));
+      res.send(error(err.message));
     }
   });
 });
@@ -69,13 +69,12 @@ app.get('/streams/:stream/segments', function (req, res) {
 // get information about a specific segment in a stream
 app.get('/streams/:stream/segments/:index', function (req, res) {
   var index = parseInt(req.params.index, 10);
-  streamer.getSegment(req.params.stream, index, function (segment) {
-    if (segment) {
+  streamer.getSegment(req.params.stream, index, function (err, segment) {
+    if (!err) {
       res.send(segment.toJSON());
     } else {
       res.statusCode = 404;
-      res.send(error('stream or segment not found: ' +
-          req.params.stream + '[' + index + ']'));
+      res.send(error(err.message));
     }
   });
 });
