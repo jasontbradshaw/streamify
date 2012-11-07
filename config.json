@@ -3,6 +3,7 @@
     "ipc_port": 8001,
     "ipc_reconnect_delay_milliseconds": 500,
     "stream_dir": "./streams",
+    "stream_prefix": "stream-",
 
     "ffmpeg_input": "rtp://127.0.0.1:5004",
     "segment_length_seconds": 10
