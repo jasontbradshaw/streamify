@@ -81,24 +81,37 @@ app.get('/streams/:stream/segments/:index', function (req, res) {
 
 // start recording a new stream
 app.post('/record', function (req, res) {
-  streamer.record();
-  res.send();
+  streamer.record(function (err, stream) {
+    if (!err) {
+      res.send(stream ? stream.toJSON() : null);
+    } else {
+      res.statusCode = 500;
+      res.send(error(err.message));
+    }
+  });
 });
 
 // stop recording any currently recording stream
 app.delete('/record', function (req, res) {
-  streamer.stop();
-  res.send();
+  streamer.stop(function (err) {
+    if (!err) {
+      res.send();
+    } else {
+      res.statusCode = 500;
+      res.send(error(err.message));
+    }
+  });
 });
 
 // cleanly close the server, cleaning up running recorders first
 app.post('/shutdown', function (req, res) {
-  streamer.stop();
-  streamer.close();
-
-  // send a successful response, then close the entire app
-  res.send();
-  process.exit(0);
+  // stop the recording first
+  streamer.stop(function (err, stream) {
+    // send a successful response, then close the entire app
+    res.send();
+    streamer.close();
+    process.exit(0);
+  });
 });
 
 app.listen(config.port);
