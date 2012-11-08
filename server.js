@@ -102,4 +102,4 @@ app.post('/shutdown', function (req, res) {
 });
 
 app.listen(config.port);
-console.log('listening on port ' + config.port);
+console.log('streamer listening on port ' + config.port);
