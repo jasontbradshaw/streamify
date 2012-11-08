@@ -34,7 +34,7 @@ app.get('/streams', function (req, res) {
         streams: _.map(streams, function (s) { return s.toJSON(); })
       });
     } else {
-      res.statusCode = 404;
+      res.statusCode = 500;
       res.send(error(err.message));
     }
   });
@@ -46,7 +46,7 @@ app.get('/streams/:stream', function (req, res) {
     if (!err) {
       res.send(stream.toJSON());
     } else {
-      res.statusCode = 404;
+      res.statusCode = 500;
       res.send(error(err.message));
     }
   });
@@ -60,7 +60,7 @@ app.get('/streams/:stream/segments', function (req, res) {
         segments: _.map(segments, function (s) { return s.toJSON(); })
       });
     } else {
-      res.statusCode = 404;
+      res.statusCode = 500;
       res.send(error(err.message));
     }
   });
@@ -73,7 +73,7 @@ app.get('/streams/:stream/segments/:index', function (req, res) {
     if (!err) {
       res.send(segment.toJSON());
     } else {
-      res.statusCode = 404;
+      res.statusCode = 500;
       res.send(error(err.message));
     }
   });
@@ -83,6 +83,7 @@ app.get('/streams/:stream/segments/:index', function (req, res) {
 app.post('/record', function (req, res) {
   streamer.record(function (err, stream) {
     if (!err) {
+      // stream can sometimes be null if timing works out badly
       res.send(stream ? stream.toJSON() : null);
     } else {
       res.statusCode = 500;
