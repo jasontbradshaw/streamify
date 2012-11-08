@@ -91,5 +91,15 @@ app.delete('/record', function (req, res) {
   res.send();
 });
 
+// cleanly close the server, cleaning up running recorders first
+app.post('/shutdown', function (req, res) {
+  streamer.stop();
+  streamer.close();
+
+  // send a successful response, then close the entire app
+  res.send();
+  process.exit(0);
+});
+
 app.listen(config.port);
 console.log('listening on port ' + config.port);
