@@ -1,5 +1,8 @@
+var path = require('path');
+
 var _ = require('underscore');
 var express = require('express');
+var stylus = require('stylus');
 
 var streamify = require('./lib/streamify');
 
@@ -25,6 +28,45 @@ var error = function (msg, props) {
 
   return err;
 };
+
+// configure our app
+app.configure(function () {
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(express.logger('dev'));
+  app.use(express.errorHandler({
+    dumpExceptions: true,
+    showStack: true
+  }));
+
+  // where jade, javascript, and stylus files live
+  app.set('views', path.join(__dirname, 'views'));
+
+  // jade
+  app.set('view engine', 'jade');
+
+  // stylus
+  app.use(stylus.middleware({
+    src: path.join(__dirname, 'views'),
+    dest: path.join(__dirname, 'static'),
+
+    // custom compilation
+    compile: function (str, path) {
+      return (stylus(str)
+        .set('filename', path)
+        .set('compress', false)
+        .set('linenos', true)
+      );
+    }
+  }));
+
+  // the static directory holds compiled views and the like
+  app.use(express.static(path.join(__dirname, 'static')));
+});
+
+app.get('/', function (req, res) {
+  res.render('index', {title: 'hello, word'});
+});
 
 // get a list of all streams sorted by create_date
 app.get('/streams', function (req, res) {
