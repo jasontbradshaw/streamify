@@ -17,6 +17,11 @@ var streamer = new streamify.Streamify(config);
 
 // return a JSON error object
 var error = function (msg, props) {
+  // convert Error objects to their messages
+  if (msg instanceof Error) {
+    msg = msg.message;
+  }
+
   var err = {
     error: msg
   };
@@ -77,7 +82,7 @@ app.get('/streams', function (req, res) {
       });
     } else {
       res.statusCode = 500;
-      res.send(error(err.message));
+      res.send(error(err));
     }
   });
 });
@@ -89,7 +94,7 @@ app.get('/streams/:stream', function (req, res) {
       res.send(stream.toJSON());
     } else {
       res.statusCode = 500;
-      res.send(error(err.message));
+      res.send(error(err));
     }
   });
 });
@@ -103,7 +108,7 @@ app.get('/streams/:stream/segments', function (req, res) {
       });
     } else {
       res.statusCode = 500;
-      res.send(error(err.message));
+      res.send(error(err));
     }
   });
 });
@@ -125,7 +130,7 @@ app.get('/streams/:stream/segments/:index', function (req, res) {
         res.send(segment.toJSON());
       } else {
         res.statusCode = 500;
-        res.send(error(err.message));
+        res.send(error(err));
       }
     });
   } else {
@@ -137,7 +142,7 @@ app.get('/streams/:stream/segments/:index', function (req, res) {
         segmentStream.pipe(res);
       } else {
         res.statusCode = 500;
-        res.send(error(err.message));
+        res.send(error(err));
       }
     });
   }
@@ -151,7 +156,7 @@ app.post('/record', function (req, res) {
       res.send(stream ? stream.toJSON() : null);
     } else {
       res.statusCode = 500;
-      res.send(error(err.message));
+      res.send(error(err));
     }
   });
 });
@@ -163,7 +168,7 @@ app.delete('/record', function (req, res) {
       res.send();
     } else {
       res.statusCode = 500;
-      res.send(error(err.message));
+      res.send(error(err));
     }
   });
 });
