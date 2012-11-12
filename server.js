@@ -68,15 +68,37 @@ app.get('/streams/:stream/segments', function (req, res) {
 
 // get information about a specific segment in a stream
 app.get('/streams/:stream/segments/:index', function (req, res) {
-  var index = parseInt(req.params.index, 10);
-  streamer.getSegment(req.params.stream, index, function (err, segment) {
-    if (!err) {
-      res.send(segment.toJSON());
-    } else {
-      res.statusCode = 500;
-      res.send(error(err.message));
-    }
-  });
+  // get useful params
+  var stream = req.params.stream;
+  var index = req.params.index;
+
+  // determine if the given index is a pure integer or something else
+  var indexIsInteger = !!(/^\d+$/.exec(index));
+  console.log(index + ': ' + indexIsInteger);
+
+  if (indexIsInteger) {
+    var indexNum = parseInt(index, 10);
+    streamer.getSegment(stream, indexNum, function (err, segment) {
+      if (!err) {
+        res.send(segment.toJSON());
+      } else {
+        res.statusCode = 500;
+        res.send(error(err.message));
+      }
+    });
+  } else {
+    // otherwise, a segment file was intended, so we try to get one
+    streamer.getSegmentStream(stream, index, function (err, segmentStream) {
+      if (!err) {
+        // pipe the segment stream to the response as a WebM video
+        res.contentType('video/webm');
+        segmentStream.pipe(res);
+      } else {
+        res.statusCode = 500;
+        res.send(error(err.message));
+      }
+    });
+  }
 });
 
 // start recording a new stream
