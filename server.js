@@ -1,6 +1,7 @@
 var path = require('path');
 
 var _ = require('underscore');
+var cons = require('consolidate');
 var express = require('express');
 var stylus = require('stylus');
 
@@ -44,13 +45,14 @@ app.configure(function () {
     showStack: true
   }));
 
-  // where jade, javascript, and stylus files live
+  // where mustache and stylus files live
   app.set('views', path.join(__dirname, 'views'));
 
-  // jade
-  app.set('view engine', 'jade');
+  // mustache for templating
+  app.engine('html', cons.mustache);
+  app.set('view engine', 'html');
 
-  // stylus
+  // stylus for styling
   app.use(stylus.middleware({
     src: path.join(__dirname, 'views'),
     dest: path.join(__dirname, 'static'),
