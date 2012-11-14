@@ -49,8 +49,8 @@ app.configure(function () {
   app.set('views', path.join(__dirname, 'views'));
 
   // mustache for templating
-  app.engine('html', cons.mustache);
-  app.set('view engine', 'html');
+  app.engine('html.mustache', cons.mustache);
+  app.set('view engine', 'html.mustache');
 
   // stylus for styling
   app.use(stylus.middleware({
