@@ -46,7 +46,7 @@ app.configure(function () {
   }));
 
   // where mustache and stylus files live
-  app.set('views', path.join(__dirname, 'views'));
+  app.set('views', path.join(__dirname, 'static'));
 
   // mustache for templating
   app.engine('html.mustache', cons.mustache);
@@ -54,7 +54,7 @@ app.configure(function () {
 
   // stylus for styling
   app.use(stylus.middleware({
-    src: path.join(__dirname, 'views'),
+    src: path.join(__dirname, 'static'),
     dest: path.join(__dirname, 'static'),
 
     // custom compilation
