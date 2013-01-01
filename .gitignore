@@ -1,3 +1,4 @@
+node_modules
 streams/*
 static/components
 static/*.css
