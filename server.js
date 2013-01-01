@@ -123,8 +123,6 @@ app.get('/streams/:stream/segments/:index', function (req, res) {
 
   // determine if the given index is a pure integer or something else
   var indexIsInteger = !!(/^\d+$/.exec(index));
-  console.log(index + ': ' + indexIsInteger);
-
   if (indexIsInteger) {
     var indexNum = parseInt(index, 10);
     streamer.getSegment(stream, indexNum, function (err, segment) {
