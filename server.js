@@ -79,9 +79,7 @@ app.get('/', function (req, res) {
 app.get('/streams', function (req, res) {
   streamer.getStreams(function (err, streams) {
     if (!err) {
-      res.send({
-        streams: _.map(streams, function (s) { return s.toJSON(); })
-      });
+      res.send(_.map(streams, function (s) { return s.toJSON(); }));
     } else {
       res.statusCode = 500;
       res.send(error(err));
@@ -105,9 +103,7 @@ app.get('/streams/:stream', function (req, res) {
 app.get('/streams/:stream/segments', function (req, res) {
   streamer.getSegments(req.params.stream, function (err, segments) {
     if (!err) {
-      res.send({
-        segments: _.map(segments, function (s) { return s.toJSON(); })
-      });
+      res.send(_.map(segments, function (s) { return s.toJSON(); }));
     } else {
       res.statusCode = 500;
       res.send(error(err));
