@@ -72,7 +72,7 @@ app.configure(function () {
 });
 
 app.get('/', function (req, res) {
-  res.render('index', {title: 'hello, word'});
+  res.render('index', {title: 'Streamify'});
 });
 
 // get a list of all streams sorted by create_date
