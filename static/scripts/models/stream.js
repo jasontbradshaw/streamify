@@ -1,7 +1,7 @@
 define([
-  'vendor/jquery',
-  'vendor/underscore',
-  'vendor/backbone'
+  'components/jquery/jquery',
+  'components/underscore-amd/underscore',
+  'components/backbone-amd/backbone'
 ], function ($, _, Backbone) {
   var Stream = Backbone.Model.extend({
 

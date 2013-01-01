@@ -1,0 +1,9 @@
+{
+  "name": "streamify",
+  "dependencies": {
+    "jquery": "1.8.x",
+    "backbone-amd": "0.9.x",
+    "requirejs": "2.1.x",
+    "underscore-amd": "~1.4.3"
+  }
+}

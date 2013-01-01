@@ -1,3 +1,4 @@
 streams/*
+static/components
 static/*.css
 static/**/*.css
