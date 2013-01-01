@@ -1,4 +1,5 @@
 require.config({
+  baseUrl: 'scripts',
   shim: {
     'components/jquery/jquery': { exports: '$' },
     'components/backbone-amd/backbone': {

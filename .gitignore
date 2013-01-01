@@ -1,5 +1,5 @@
 node_modules
 streams/*
-static/components
+static/scripts/components
 static/*.css
 static/**/*.css
