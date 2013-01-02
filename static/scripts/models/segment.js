@@ -3,13 +3,13 @@ define([
   'components/underscore-amd/underscore',
   'components/backbone-amd/backbone'
 ], function ($, _, Backbone) {
-  var Stream = Backbone.Model.extend({
-    urlRoot: '/streams',
-
+  var Segment = Backbone.Model.extend({
     defaults: {
       id: '',
       size: 0,
-      segment_count: 0,
+      start: 0,
+      end: 0,
+      duration: 0,
       create_date: null,
       update_date: null
     },
@@ -19,5 +19,5 @@ define([
     }
   });
 
-  return Stream;
+  return Segment;
 });
